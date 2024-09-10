@@ -1,16 +1,19 @@
--- Creo de la Base de Datos
+# Creo de la Base de Datos
 CREATE DATABASE banco;
 
--- selecciono la base de datos sobre la cual voy a hacer modificaciones
+# selecciono la base de datos sobre la cual voy a hacer modificaciones
 USE banco;
 
--- Creación Tablas 
+#-------------------------------------------------------------------------
+# Creación Tablas para las entidades
 
 CREATE TABLE ciudad ( 
     nombre VARCHAR(45) NOT NULL,
     cod_postal SMALLINT unsigned NOT NULL,
     
-    CONSTRAINT pk_ciudad PRIMARY KEY (cod_postal)
+    CONSTRAINT pk_ciudad 
+    PRIMARY KEY (cod_postal)
+
 ) ENGINE=InnoDB;
 
 CREATE TABLE sucursal (
@@ -21,8 +24,12 @@ CREATE TABLE sucursal (
     horario VARCHAR(50) NOT NULL,
     cod_postal SMALLINT unsigned NOT NULL,
 
-    CONSTRAINT pk_sucursal PRIMARY KEY (nro_suc),
-    CONSTRAINT fk_sucursal_ciudad FOREIGN KEY (cod_postal) REFERENCES  ciudad(cod_postal)
+    CONSTRAINT pk_sucursal 
+    PRIMARY KEY (nro_suc),
+
+    CONSTRAINT fk_sucursal_ciudad 
+    FOREIGN KEY (cod_postal) REFERENCES  ciudad(cod_postal)
+
 ) ENGINE=InnoDB;
 
 CREATE TABLE empleado (
@@ -37,6 +44,7 @@ CREATE TABLE empleado (
 
     CONSTRAINT pk_empleado PRIMARY KEY (legajo),
     CONSTRAINT fk_empleado_sucursal FOREIGN KEY (nro_suc) REFERENCES sucursal(nro_suc)
+
 ) ENGINE=InnoDB;
 
 CREATE TABLE cliente (
@@ -66,9 +74,9 @@ CREATE TABLE plazo_fijo (
     CONSTRAINT pk_plazo_fijo
     PRIMARY KEY (nro_plazo),
 
-    CONSTRAINT fk_plazo_fijo_sucursal FOREIGN KEY (nro_suc) REFERENCES sucursal(nro_suc)
+    CONSTRAINT fk_plazo_fijo_sucursal 
+    FOREIGN KEY (nro_suc) REFERENCES sucursal(nro_suc)
 
-    
 ) ENGINE=InnoDB;
 
 CREATE TABLE tasa_plazo_fijo (
@@ -174,6 +182,8 @@ CREATE TABLE tarjeta (
 
 ) ENGINE=InnoDB;
 
+# FALTA CREAR LA TABLA CAJA
+
 CREATE TABLE ventanilla (
     cod_caja SMALLINT unsigned NOT NULL,
     nro_suc SMALLINT unsigned NOT NULL,
@@ -199,6 +209,8 @@ CREATE TABLE ATM (
 
 ) ENGINE=InnoDB;
 
+# FALTA CREAR LA TABLA TRANSACCION
+
 CREATE TABLE debito (
     nro_trans BIGINT(10) unsigned NOT NULL,
     descripcion VARCHAR(100) NOT NULL,
@@ -218,6 +230,8 @@ CREATE TABLE debito (
     FOREIGN KEY (nro_cliente) REFERENCES cliente(nro_cliente)
 
 ) ENGINE=InnoDB;
+
+# FALTA CREAR LA TABLA TRANSACCION_POR_CAJA
 
 CREATE TABLE deposito (
     nro_trans BIGINT(10) unsigned NOT NULL,
@@ -276,9 +290,11 @@ CREATE TABLE transferencia (
     
 ) ENGINE=InnoDB;
 
+#-------------------------------------------------------------------------
+# Carga de datos de Prueba
 
+INSERT INTO ciudad VALUES("pigue", 8170);
 
+INSERT INTO sucursal VALUES(128, "galicia", "peru170", "291", "18:00-20:00", 8170);
 
--- INSERT INTO ciudad VALUES('pigue',8170);
--- INSERT INTO sucursal VALUES(128, 'galicia', 'peru170', '291', '18:00-20:00', 8170);
--- INSERT INTO empleado VALUES( 127000 , 'sevenants', 'antonio', 'DNI', 43091344, 'alem1047', '2923', 'asistente', md5('hola'), 128);
+# INSERT INTO empleado VALUES(127000 , "Sevenants", "Antonio", "DNI", 43091344, "alem1047", "2923", "Encargado", md5("hola"), 128);
