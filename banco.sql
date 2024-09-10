@@ -293,8 +293,21 @@ CREATE TABLE transferencia (
 #-------------------------------------------------------------------------
 # Carga de datos de Prueba
 
-INSERT INTO ciudad VALUES("pigue", 8170);
+#Ciudades:
+INSERT INTO ciudad VALUES("Pigue", 8170);
+INSERT INTO ciudad VALUES("Bahia Blanca", 8000);
+INSERT INTO ciudad VALUES("La Plata", 1900);
+INSERT INTO ciudad VALUES("Mar del Plata", 7600);
+INSERT INTO ciudad VALUES("Tandil", 7000);
+INSERT INTO ciudad VALUES("Olavarria", 7400);
+INSERT INTO ciudad VALUES("Junin", 6000);
+INSERT INTO ciudad VALUES("San Nicolas de los Arrollos", 2900);
+INSERT INTO ciudad VALUES("Chivilcoy", 6620);
+INSERT INTO ciudad VALUES("Zarate", 2800);
 
+#Sucursales
 INSERT INTO sucursal VALUES(128, "galicia", "peru170", "291", "18:00-20:00", 8170);
+
+
 
 # INSERT INTO empleado VALUES(127000 , "Sevenants", "Antonio", "DNI", 43091344, "alem1047", "2923", "Encargado", md5("hola"), 128);
