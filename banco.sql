@@ -386,3 +386,69 @@ INSERT INTO empleado VALUES(2091, "Vargas", "Sofia", "DNI", 36567890, "Av. San M
 INSERT INTO empleado VALUES(2092, "Castro", "Carlos", "DNI", 37678901, "Lavalle 450", "1189012345", "Asistente", "pass5678", 134);
 INSERT INTO empleado VALUES(2093, "Navarro", "Julieta", "DNI", 38789012, "Peatonal San Martin 550", "1190123456", "Cajero", "word1234", 134);
 INSERT INTO empleado VALUES(2094, "Rios", "Tomas", "DNI", 39890123, "Avenida Colon 1500", "1201234567", "Cajero", "1234word", 135);
+
+#-------------------------------------------------------------------------
+# Creacion de vistas 
+# trans_cajas_ahorro = Datos de todas las transferencias que son "caja_ahorro"
+/*
+   CREATE VIEW trans_cajas_ahorro AS 
+   SELECT c.nro_ca, c.saldo, 
+          c.clase, c.pais, c.nro_caniones, c.calibre, c. desplazamiento,
+		  b_c.lanzado
+   FROM (caja_ahorro as c JOIN  barco_clase as b_c ON b.nombre_barco = b_c.nombre_barco) 
+        JOIN clases as c   ON c.clase = b_c.clase
+   WHERE c.tipo="acorazado";*/
+
+
+#-------------------------------------------------------------------------
+# Creacion de usuarios y otorgamiento de privilegios
+
+# primero creo un usuario con CREATE USER
+
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';
+
+# el usuario admin con password 'admin' puede conectarse solo 
+# desde la desde la computadora donde se encuentra el servidor de MySQL (localhost)   
+
+# luego le otorgo privilegios utilizando solo la sentencia GRANT
+
+    GRANT ALL PRIVILEGES ON banco.* TO 'admin'@'localhost' WITH GRANT OPTION;
+
+# El usuario 'admin' tiene acceso total a todas las tablas de 
+# la B.D. banco y puede crear nuevos usuarios y otorgar privilegios.
+
+# Luego creo un usuario 'empleado' con CREATE USER
+
+    CREATE USER 'empleado'@'localhost' IDENTIFIED BY 'empleado'; 
+
+# el usuario 'empleado' con password 'empleado' puede conectarse solo desde localhost
+
+# Luego le otorgo privilegios con GRANT
+
+    #CONSULTA
+    GRANT SELECT ON banco.empleado TO 'empleado'@'localhost';
+    GRANT SELECT ON banco.sucursal TO 'empleado'@'localhost'; 
+    GRANT SELECT ON banco.tasa_plazo_fijo TO 'empleado'@'localhost';
+    GRANT SELECT ON banco.tasa_prestamo TO 'empleado'@'localhost';
+
+    #CONSULTA Y CREA
+    GRANT SELECT, INSERT ON banco.prestamo TO 'empleado'@'localhost';
+    GRANT SELECT, INSERT ON banco.plazo_fijo TO 'empleado'@'localhost';
+    GRANT SELECT, INSERT ON banco.plazo_cliente TO 'empleado'@'localhost';
+    GRANT SELECT, INSERT ON banco.caja_ahorro TO 'empleado'@'localhost';
+    GRANT SELECT, INSERT ON banco.tarjeta TO 'empleado'@'localhost';
+
+    #CONSULTA, CREA Y MODIFICA
+    GRANT SELECT, INSERT, UPDATE ON banco.cliente_ca TO 'empleado'@'localhost';
+    GRANT SELECT, INSERT, UPDATE ON banco.cliente TO 'empleado'@'localhost';
+    GRANT SELECT, INSERT, UPDATE ON banco.pago TO 'empleado'@'localhost';
+
+/*# Luego creo un usuario 'atm' con CREATE USER
+
+    CREATE USER 'atm'@'localhost' IDENTIFIED BY 'atm'; 
+
+# el usuario 'atm' con password 'atm' puede conectarse solo desde localhost
+
+# Luego le otorgo privilegios con GRANT*/
+
+    
