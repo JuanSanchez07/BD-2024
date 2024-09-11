@@ -182,7 +182,13 @@ CREATE TABLE tarjeta (
 
 ) ENGINE=InnoDB;
 
-# FALTA CREAR LA TABLA CAJA
+CREATE TABLE caja (
+    cod_caja SMALLINT unsigned NOT NULL, -- USO SMALLINT PORQUE TIENE 5 CIFRAS
+
+    CONSTRAINT pk_caja
+    PRIMARY KEY (cod_caja)
+
+) ENGINE=InnoDB;
 
 CREATE TABLE ventanilla (
     cod_caja SMALLINT unsigned NOT NULL,
@@ -209,7 +215,16 @@ CREATE TABLE ATM (
 
 ) ENGINE=InnoDB;
 
-# FALTA CREAR LA TABLA TRANSACCION
+CREATE TABLE transaccion (
+    nro_trans INT unsigned NOT NULL, -- USO INT PORQUE ES 10 CIFRAS
+    fecha DATE NOT NULL,
+    hora TIME NOT NULL,
+    monto FLOAT(45, 2) unsigned NOT NULL,
+
+    CONSTRAINT pk_transaccion
+    PRIMARY KEY (nro_trans)
+
+) ENGINE=InnoDB;
 
 CREATE TABLE debito (
     nro_trans BIGINT(10) unsigned NOT NULL,
@@ -231,7 +246,14 @@ CREATE TABLE debito (
 
 ) ENGINE=InnoDB;
 
-# FALTA CREAR LA TABLA TRANSACCION_POR_CAJA
+CREATE TABLE transaccion_por_caja (
+    nro_trans INT unsigned NOT NULL,
+    cod_caja SMALLINT unsigned NOT NULL,
+
+    CONSTRAINT pk_transaccion_por_caja
+    PRIMARY KEY (nro_trans)
+
+) ENGINE=InnoDB;
 
 CREATE TABLE deposito (
     nro_trans BIGINT(10) unsigned NOT NULL,
@@ -309,5 +331,5 @@ INSERT INTO ciudad VALUES("Zarate", 2800);
 INSERT INTO sucursal VALUES(128, "galicia", "peru170", "291", "18:00-20:00", 8170);
 
 
-
+#Empleados
 # INSERT INTO empleado VALUES(127000 , "Sevenants", "Antonio", "DNI", 43091344, "alem1047", "2923", "Encargado", md5("hola"), 128);
