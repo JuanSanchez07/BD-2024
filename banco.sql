@@ -60,7 +60,7 @@ CREATE TABLE cliente (
     nro_doc INT(8) unsigned NOT NULL, -- NUMERO DE 8 CIFRAS
     direccion VARCHAR(100) NOT NULL,
     telefono VARCHAR(100) NOT NULL,
-    fecha_nac VARCHAR(100) NOT NULL,
+    fecha_nac DATE NOT NULL,
 
     CONSTRAINT pk_cliente
     PRIMARY KEY (nro_cliente)
@@ -70,8 +70,8 @@ CREATE TABLE cliente (
 CREATE TABLE plazo_fijo (
     nro_plazo INT(8) unsigned NOT NULL, -- NUMERO DE 8 CIFRAS
     capital FLOAT(100, 2) unsigned NOT NULL,
-    fecha_inicio VARCHAR(100) NOT NULL,
-    fecha_fin VARCHAR(100),
+    fecha_inicio DATE NOT NULL,
+    fecha_fin DATE,
     tasa_interes FLOAT(100, 2) unsigned NOT NULL,
     interes FLOAT(100, 2) unsigned NOT NULL,
     nro_suc SMALLINT unsigned NOT NULL,
@@ -96,17 +96,17 @@ CREATE TABLE tasa_plazo_fijo (
 ) ENGINE=InnoDB;
 
 CREATE TABLE plazo_cliente (
-    nro_plazo SMALLINT unsigned NOT NULL,
+    nro_plazo INT(8) unsigned NOT NULL,
     nro_cliente SMALLINT unsigned NOT NULL,
 
     CONSTRAINT pk_plazo_cliente
     PRIMARY KEY (nro_plazo, nro_cliente),
 
     CONSTRAINT fk_plazo_cliente_cliente
-    FOREIGN KEY (nro_cliente) REFERENCES cliente (nro_cliente)/*,
+    FOREIGN KEY (nro_cliente) REFERENCES cliente (nro_cliente),
 
-    --CONSTRAINT fk_plazo_cliente_plazo_fijo
-    --FOREIGN KEY (nro_plazo) REFERENCES plazo_fijo (nro_plazo)*/
+    CONSTRAINT fk_plazo_cliente_plazo_fijo
+    FOREIGN KEY (nro_plazo) REFERENCES plazo_fijo (nro_plazo)
 
 ) ENGINE=InnoDB;
 
@@ -124,19 +124,17 @@ CREATE TABLE prestamo (
     CONSTRAINT pk_prestamo
     PRIMARY KEY (nro_prestamo),
 
-    -- CONSULTAR, ESTA CLAVE VA O NO?
     CONSTRAINT fk_prestamo_empleado
-    FOREIGN KEY (legajo) REFERENCES empleado (legajo)/*,
-    
+    FOREIGN KEY (legajo) REFERENCES empleado (legajo),
 
-    --CONSTRAINT fk_prestamo_cliente
-    --FOREIGN KEY (nro_cliente) REFERENCES cliente (nro_cliente)*/
+    CONSTRAINT fk_prestamo_cliente
+    FOREIGN KEY (nro_cliente) REFERENCES cliente (nro_cliente)
 
 ) ENGINE=InnoDB;
 
 CREATE TABLE pago (
     nro_prestamo INT(8) unsigned NOT NULL,
-    nro_pago SMALLINT unsigned NOT NULL,
+    nro_pago INT(2) unsigned NOT NULL,
     fecha_venc DATE NOT NULL,
     fecha_pago DATE NOT NULL,
 
@@ -149,7 +147,7 @@ CREATE TABLE pago (
 ) ENGINE=InnoDB;
 
 CREATE TABLE tasa_prestamo (
-    periodo SMALLINT unsigned NOT NULL,
+    periodo INT(3) unsigned NOT NULL,
     monto_inf FLOAT(100,2) unsigned NOT NULL,
     monto_sup FLOAT(100,2) unsigned NOT NULL,
     tasa FLOAT(100,2) unsigned NOT NULL,
@@ -161,7 +159,7 @@ CREATE TABLE tasa_prestamo (
 
 CREATE TABLE caja_ahorro (
     nro_ca INT(8) unsigned NOT NULL,
-    CBU BIGINT unsigned NOT NULL, -- NUMERO DE 18 CIFRAS
+    CBU BIGINT(18) unsigned NOT NULL, -- NUMERO DE 18 CIFRAS
     saldo FLOAT(100,2) unsigned NOT NULL,
 
     CONSTRAINT pk_caja_ahorro 
@@ -176,7 +174,6 @@ CREATE TABLE cliente_ca (
     CONSTRAINT pk_client_ca
     PRIMARY KEY (nro_cliente,nro_ca),
 
-    -- ESTAS LLAVES VAN O NO?
     CONSTRAINT fk_cliente_ca_cliente
     FOREIGN KEY (nro_cliente) REFERENCES cliente(nro_cliente),
 
@@ -186,7 +183,7 @@ CREATE TABLE cliente_ca (
 ) ENGINE=InnoDB;
 
 CREATE TABLE tarjeta (
-    nro_tarjeta BIGINT unsigned NOT NULL,
+    nro_tarjeta BIGINT(16) unsigned NOT NULL,
     PIN VARCHAR(32) NOT NULL,
     CVT VARCHAR(32) NOT NULL,
     fecha_venc DATE NOT NULL,
@@ -218,6 +215,9 @@ CREATE TABLE ventanilla (
 
     CONSTRAINT pk_ventanilla
     PRIMARY KEY(cod_caja),
+
+    CONSTRAINT fk_ventanilla_caja
+    FOREIGN KEY (cod_caja) REFERENCES caja(cod_caja),
     
     CONSTRAINT fk_ventanilla_sucursal
     FOREIGN KEY (nro_suc) REFERENCES sucursal(nro_suc)
@@ -232,11 +232,11 @@ CREATE TABLE ATM (
     CONSTRAINT pk_ATM 
     PRIMARY KEY (cod_caja),
 
-    CONSTRAINT fk_ATM_ciudad
-    FOREIGN KEY (cod_postal) REFERENCES ciudad(cod_postal),
-
     CONSTRAINT fk_ATM_caja
-    FOREIGN KEY (cod_caja) REFERENCES caja (cod_caja)
+    FOREIGN KEY (cod_caja) REFERENCES caja (cod_caja),
+
+    CONSTRAINT fk_ATM_ciudad
+    FOREIGN KEY (cod_postal) REFERENCES ciudad(cod_postal)
 
 ) ENGINE=InnoDB;
 
@@ -252,18 +252,17 @@ CREATE TABLE transaccion (
 ) ENGINE=InnoDB;
 
 CREATE TABLE debito (
-    nro_trans BIGINT(10) unsigned NOT NULL,
+    nro_trans INT(10) unsigned NOT NULL,
     descripcion VARCHAR(100) NOT NULL,
     nro_cliente SMALLINT unsigned NOT NULL,
     nro_ca INT(8) unsigned NOT NULL,
 
     CONSTRAINT pk_debito
     PRIMARY KEY (nro_trans),
-    /*
-    --CONSTRAINT fk_debito_transaccion
-    --FOREIGN KEY (nro_trans) REFERENCES transaccion (nro_trans),
-    */ 
-
+    
+    CONSTRAINT fk_debito_transaccion
+    FOREIGN KEY (nro_trans) REFERENCES transaccion (nro_trans),
+    
     CONSTRAINT fk_debito_cliente
     FOREIGN KEY (nro_cliente) REFERENCES cliente(nro_cliente),
 
@@ -273,30 +272,29 @@ CREATE TABLE debito (
 ) ENGINE=InnoDB;
 
 CREATE TABLE transaccion_por_caja (
-    nro_trans BIGINT(10) unsigned NOT NULL,
+    nro_trans INT(10) unsigned NOT NULL,
     cod_caja SMALLINT unsigned NOT NULL,
 
     CONSTRAINT pk_transaccion_por_caja
-    PRIMARY KEY (nro_trans) 
+    PRIMARY KEY (nro_trans), 
 
-    /*
-    --CONSTRAINT fk_transaccion_por_caja_transaccion
-    --FOREIGN KEY (nro_trans) REFERENCES transaccion(nro_trans),
+    CONSTRAINT fk_transaccion_por_caja_transaccion
+    FOREIGN KEY (nro_trans) REFERENCES transaccion(nro_trans),
 
-    --CONSTRAINT fk_transaccion_por_caja_caja
-    --FOREIGN KEY (cod_caja) REFERENCES caja(cod_caja)
-    */
+    CONSTRAINT fk_transaccion_por_caja_caja
+    FOREIGN KEY (cod_caja) REFERENCES caja(cod_caja)
+    
 ) ENGINE=InnoDB;
 
 CREATE TABLE deposito (
-    nro_trans BIGINT(10) unsigned NOT NULL,
+    nro_trans INT(10) unsigned NOT NULL,
     nro_ca INT(8) unsigned NOT NULL,
 
     CONSTRAINT pk_deposito
     PRIMARY KEY (nro_trans),
 
-    /*CONSTRAINT fk_deposito_transaccion_por_caja
-    FOREIGN KEY (nro_trans) REFERENCES transaccion_por_caja(nro_trans),*/
+    CONSTRAINT fk_deposito_transaccion_por_caja
+    FOREIGN KEY (nro_trans) REFERENCES transaccion_por_caja(nro_trans),
 
     CONSTRAINT fk_deposito_caja_ahorro
     FOREIGN KEY (nro_ca) REFERENCES caja_ahorro(nro_ca)
@@ -304,12 +302,12 @@ CREATE TABLE deposito (
 ) ENGINE=InnoDB;
 
 CREATE TABLE extraccion (
-    nro_trans BIGINT(10) unsigned NOT NULL,
+    nro_trans INT(10) unsigned NOT NULL,
     nro_cliente SMALLINT unsigned NOT NULL,
     nro_ca INT(8) unsigned NOT NULL,
 
     CONSTRAINT pk_extraccion
-    PRIMARY KEY (nro_trans)/*,
+    PRIMARY KEY (nro_trans),
 
     CONSTRAINT fk_extraccion_transaccion_por_caja
     FOREIGN KEY (nro_trans) REFERENCES transaccion_por_caja(nro_trans),
@@ -318,18 +316,18 @@ CREATE TABLE extraccion (
     FOREIGN KEy (nro_cliente) REFERENCES cliente(nro_cliente),
 
     CONSTRAINT fk_extraccion_caja_ahorro
-    FOREIGN KEY (nro_ca) REFERENCES caja_ahorro(nro_ca)*/
+    FOREIGN KEY (nro_ca) REFERENCES caja_ahorro(nro_ca)
 
 ) ENGINE=InnoDB;
 
 CREATE TABLE transferencia (
-    nro_trans BIGINT(10) unsigned NOT NULL,
+    nro_trans INT(10) unsigned NOT NULL,
     nro_cliente SMALLINT unsigned NOT NULL,
-    origen SMALLINT unsigned NOT NULL,
-    destino SMALLINT unsigned NOT NULL,
+    origen INT(8) unsigned NOT NULL, -- ORIGEN Y DEST SON
+    destino INT(8) unsigned NOT NULL, -- NRO_CA POR LO TANTO TIENEN 8 DIGITOS
 
     CONSTRAINT pk_transferencia
-    PRIMARY KEY (nro_trans)/*,
+    PRIMARY KEY (nro_trans),
 
     CONSTRAINT fk_transferencia_transaccion_por_caja
     FOREIGN KEY (nro_trans) REFERENCES transaccion_por_caja(nro_trans),
@@ -341,7 +339,7 @@ CREATE TABLE transferencia (
     FOREIGN KEY (origen) REFERENCES caja_ahorro(nro_ca),
 
     CONSTRAINT fk_transferencia_destino
-    FOREIGN KEY (destino) REFERENCES caja_ahorro(nro_ca)*/
+    FOREIGN KEY (destino) REFERENCES caja_ahorro(nro_ca)
     
 ) ENGINE=InnoDB;
 
