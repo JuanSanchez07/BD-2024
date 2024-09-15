@@ -17,7 +17,7 @@ CREATE TABLE ciudad (
 ) ENGINE=InnoDB;
 
 CREATE TABLE sucursal (
-    nro_suc SMALLINT unsigned NOT NULL,
+    nro_suc SMALLINT unsigned NOT NULL AUTO_INCREMENT, -- Se agrega AUTO_INCREMENT
     nombre VARCHAR(100) NOT NULL,
     direccion VARCHAR(100) NOT NULL,
     telefono VARCHAR(20) NOT NULL,
@@ -32,16 +32,17 @@ CREATE TABLE sucursal (
 
 ) ENGINE=InnoDB;
 
+
 CREATE TABLE empleado (
-    legajo SMALLINT unsigned NOT NULL,
+    legajo SMALLINT unsigned NOT NULL AUTO_INCREMENT, -- Se agrega AUTO_INCREMENT
     apellido VARCHAR(100) NOT NULL,
     nombre VARCHAR(100) NOT NULL,
-    tipo_doc VARCHAR(100) NOT NULL,
+    tipo_doc VARCHAR(20) NOT NULL, -- Cambiado a VARCHAR(20)
     nro_doc INT(8) unsigned NOT NULL, -- NUMERO DE 8 CIFRAS
     direccion VARCHAR(100) NOT NULL,
     telefono VARCHAR(100) NOT NULL,
     cargo VARCHAR(100) NOT NULL,
-    pass VARCHAR(32) NOT NULL,
+    password VARCHAR(32) NOT NULL, -- Renombrado de 'pass' a 'password'
     nro_suc SMALLINT unsigned NOT NULL,
 
     CONSTRAINT pk_empleado 
@@ -53,10 +54,10 @@ CREATE TABLE empleado (
 ) ENGINE=InnoDB;
 
 CREATE TABLE cliente (
-    nro_cliente SMALLINT unsigned NOT NULL,
+    nro_cliente SMALLINT unsigned NOT NULL AUTO_INCREMENT, -- Se agrega AUTO_INCREMENT
     apellido VARCHAR(100) NOT NULL,
     nombre VARCHAR(100) NOT NULL,
-    tipo_doc VARCHAR(100) NOT NULL,
+    tipo_doc VARCHAR(20) NOT NULL, -- Cambiado a VARCHAR(20)
     nro_doc INT(8) unsigned NOT NULL, -- NUMERO DE 8 CIFRAS
     direccion VARCHAR(100) NOT NULL,
     telefono VARCHAR(100) NOT NULL,
@@ -68,12 +69,12 @@ CREATE TABLE cliente (
 ) ENGINE=InnoDB;
 
 CREATE TABLE plazo_fijo (
-    nro_plazo INT(8) unsigned NOT NULL, -- NUMERO DE 8 CIFRAS
-    capital FLOAT(100, 2) unsigned NOT NULL,
+    nro_plazo INT(8) unsigned NOT NULL AUTO_INCREMENT, -- Se agrega AUTO_INCREMENT
+    capital DECIMAL(16, 2) unsigned NOT NULL, -- Cambiado a DECIMAL(16,2)
     fecha_inicio DATE NOT NULL,
-    fecha_fin DATE,
-    tasa_interes FLOAT(100, 2) unsigned NOT NULL,
-    interes FLOAT(100, 2) unsigned NOT NULL,
+    fecha_fin DATE NOT NULL, -- Cambiado a NOT NULL
+    tasa_interes DECIMAL(4, 2) unsigned NOT NULL, -- Cambiado a DECIMAL(4,2)
+    interes DECIMAL(16, 2) unsigned NOT NULL, -- Cambiado a DECIMAL(16,2)
     nro_suc SMALLINT unsigned NOT NULL,
 
     CONSTRAINT pk_plazo_fijo
@@ -86,14 +87,15 @@ CREATE TABLE plazo_fijo (
 
 CREATE TABLE tasa_plazo_fijo (
     periodo SMALLINT unsigned NOT NULL,
-    monto_inf FLOAT(100, 2) unsigned NOT NULL,
-    monto_sup FLOAT(100, 2) unsigned NOT NULL,
-    tasa FLOAT(100, 2) unsigned NOT NULL,
+    monto_inf DECIMAL(16, 2) unsigned NOT NULL, -- Cambiado a DECIMAL(16,2)
+    monto_sup DECIMAL(16, 2) unsigned NOT NULL, -- Cambiado a DECIMAL(16,2)
+    tasa DECIMAL(4, 2) unsigned NOT NULL, -- Cambiado a DECIMAL(4,2)
 
     CONSTRAINT pk_tasa_plazo_fijo
     PRIMARY KEY (periodo, monto_inf, monto_sup)
 
 ) ENGINE=InnoDB;
+
 
 CREATE TABLE plazo_cliente (
     nro_plazo INT(8) unsigned NOT NULL,
@@ -111,13 +113,13 @@ CREATE TABLE plazo_cliente (
 ) ENGINE=InnoDB;
 
 CREATE TABLE prestamo (
-    nro_prestamo INT(8) unsigned NOT NULL, -- NUMERO DE 8 CIFRAS
+    nro_prestamo INT(8) unsigned NOT NULL AUTO_INCREMENT, -- Ahora es AUTO_INCREMENT
     fecha DATE NOT NULL,
     cant_meses SMALLINT unsigned NOT NULL,
-    monto FLOAT(100, 2) unsigned NOT NULL,
-    tasa_interes FLOAT(100, 2) unsigned NOT NULL,
-    interes FLOAT(100, 2) unsigned NOT NULL,
-    valor_cuota FLOAT(100, 2) unsigned NOT NULL,
+    monto DECIMAL(10, 2) unsigned NOT NULL, -- Cambiado a DECIMAL(10,2)
+    tasa_interes DECIMAL(4, 2) unsigned NOT NULL, -- Cambiado a DECIMAL(4,2)
+    interes DECIMAL(9, 2) unsigned NOT NULL, -- Cambiado a DECIMAL(9,2)
+    valor_cuota DECIMAL(9, 2) unsigned NOT NULL, -- Cambiado a DECIMAL(9,2)
     legajo SMALLINT unsigned NOT NULL,
     nro_cliente SMALLINT unsigned NOT NULL,
 
@@ -136,10 +138,10 @@ CREATE TABLE pago (
     nro_prestamo INT(8) unsigned NOT NULL,
     nro_pago INT(2) unsigned NOT NULL,
     fecha_venc DATE NOT NULL,
-    fecha_pago DATE NOT NULL,
+    fecha_pago DATE NULL, -- Ahora permite valores nulos (NULL)
 
     CONSTRAINT pk_pago 
-    PRIMARY KEY (nro_prestamo,nro_pago),
+    PRIMARY KEY (nro_prestamo, nro_pago),
 
     CONSTRAINT fk_pago_prestamo 
     FOREIGN KEY (nro_prestamo) REFERENCES prestamo(nro_prestamo)
@@ -148,9 +150,9 @@ CREATE TABLE pago (
 
 CREATE TABLE tasa_prestamo (
     periodo INT(3) unsigned NOT NULL,
-    monto_inf FLOAT(100,2) unsigned NOT NULL,
-    monto_sup FLOAT(100,2) unsigned NOT NULL,
-    tasa FLOAT(100,2) unsigned NOT NULL,
+    monto_inf DECIMAL(10,2) UNSIGNED NOT NULL, -- Cambiado a DECIMAL(10,2) UNSIGNED
+    monto_sup DECIMAL(10,2) UNSIGNED NOT NULL, -- Cambiado a DECIMAL(10,2) UNSIGNED
+    tasa DECIMAL(4,2) UNSIGNED NOT NULL,       -- Cambiado a DECIMAL(4,2) UNSIGNED
 
     CONSTRAINT pk_tasa_prestamo
     PRIMARY KEY (periodo, monto_inf, monto_sup)
@@ -158,9 +160,9 @@ CREATE TABLE tasa_prestamo (
 ) ENGINE=InnoDB;
 
 CREATE TABLE caja_ahorro (
-    nro_ca INT(8) unsigned NOT NULL,
+    nro_ca INT(8) unsigned NOT NULL AUTO_INCREMENT,
     CBU BIGINT(18) unsigned NOT NULL, -- NUMERO DE 18 CIFRAS
-    saldo FLOAT(100,2) unsigned NOT NULL,
+    saldo DECIMAL(16,2) unsigned NOT NULL,
 
     CONSTRAINT pk_caja_ahorro 
     PRIMARY KEY (nro_ca)
@@ -183,7 +185,7 @@ CREATE TABLE cliente_ca (
 ) ENGINE=InnoDB;
 
 CREATE TABLE tarjeta (
-    nro_tarjeta BIGINT(16) unsigned NOT NULL,
+    nro_tarjeta BIGINT(16) unsigned NOT NULL AUTO_INCREMENT,
     PIN VARCHAR(32) NOT NULL,
     CVT VARCHAR(32) NOT NULL,
     fecha_venc DATE NOT NULL,
@@ -193,16 +195,13 @@ CREATE TABLE tarjeta (
     CONSTRAINT pk_tarjeta 
     PRIMARY KEY (nro_tarjeta),
 
-    CONSTRAINT fk_tarjeta_cliente 
-    FOREIGN KEY (nro_cliente) REFERENCES cliente(nro_cliente),
-
-    CONSTRAINT fk_tarjeta_caja_ahorro
-    FOREIGN KEY (nro_ca) REFERENCES caja_ahorro(nro_ca)
+    CONSTRAINT fk_tarjeta_cliente_ca
+    FOREIGN KEY (nro_cliente, nro_ca) REFERENCES cliente_ca(nro_cliente, nro_ca)
 
 ) ENGINE=InnoDB;
 
 CREATE TABLE caja (
-    cod_caja SMALLINT unsigned NOT NULL, -- USO SMALLINT PORQUE TIENE 5 CIFRAS
+    cod_caja SMALLINT unsigned NOT NULL AUTO_INCREMENT, -- USO SMALLINT PORQUE TIENE 5 CIFRAS
 
     CONSTRAINT pk_caja
     PRIMARY KEY (cod_caja)
@@ -227,7 +226,7 @@ CREATE TABLE ventanilla (
 CREATE TABLE ATM (
     cod_caja SMALLINT unsigned NOT NULL,
     cod_postal SMALLINT unsigned NOT NULL,
-    direcccion VARCHAR(100) NOT NULL,
+    direccion VARCHAR(100) NOT NULL,
 
     CONSTRAINT pk_ATM 
     PRIMARY KEY (cod_caja),
@@ -241,10 +240,10 @@ CREATE TABLE ATM (
 ) ENGINE=InnoDB;
 
 CREATE TABLE transaccion (
-    nro_trans INT(10) unsigned NOT NULL, -- USO INT PORQUE ES 10 CIFRAS
+    nro_trans INT(10) unsigned NOT NULL AUTO_INCREMENT, -- Cambié para incluir AUTO_INCREMENT
     fecha DATE NOT NULL,
     hora TIME NOT NULL,
-    monto FLOAT(45, 2) unsigned NOT NULL,
+    monto DECIMAL(16, 2) unsigned NOT NULL, -- Cambié FLOAT a DECIMAL(16,2)
 
     CONSTRAINT pk_transaccion
     PRIMARY KEY (nro_trans)
@@ -253,7 +252,7 @@ CREATE TABLE transaccion (
 
 CREATE TABLE debito (
     nro_trans INT(10) unsigned NOT NULL,
-    descripcion VARCHAR(100) NOT NULL,
+    descripcion TEXT,
     nro_cliente SMALLINT unsigned NOT NULL,
     nro_ca INT(8) unsigned NOT NULL,
 
@@ -263,11 +262,8 @@ CREATE TABLE debito (
     CONSTRAINT fk_debito_transaccion
     FOREIGN KEY (nro_trans) REFERENCES transaccion (nro_trans),
     
-    CONSTRAINT fk_debito_cliente
-    FOREIGN KEY (nro_cliente) REFERENCES cliente(nro_cliente),
-
-    CONSTRAINT fk_debito_caja_ahorro
-    FOREIGN KEY (nro_ca) REFERENCES caja_ahorro(nro_ca)
+    CONSTRAINT fk_debito_cliente_ca
+    FOREIGN KEY (nro_cliente, nro_ca) REFERENCES cliente_ca(nro_cliente, nro_ca)
 
 ) ENGINE=InnoDB;
 
@@ -312,35 +308,28 @@ CREATE TABLE extraccion (
     CONSTRAINT fk_extraccion_transaccion_por_caja
     FOREIGN KEY (nro_trans) REFERENCES transaccion_por_caja(nro_trans),
 
-    CONSTRAINT fk_extraccion_cliente
-    FOREIGN KEy (nro_cliente) REFERENCES cliente(nro_cliente),
-
-    CONSTRAINT fk_extraccion_caja_ahorro
-    FOREIGN KEY (nro_ca) REFERENCES caja_ahorro(nro_ca)
+    CONSTRAINT fk_extraccion_cliente_ca
+    FOREIGN KEy (nro_cliente, nro_ca) REFERENCES cliente_ca(nro_cliente, nro_ca)
 
 ) ENGINE=InnoDB;
 
 CREATE TABLE transferencia (
     nro_trans INT(10) unsigned NOT NULL,
     nro_cliente SMALLINT unsigned NOT NULL,
-    origen INT(8) unsigned NOT NULL, -- ORIGEN Y DEST SON
-    destino INT(8) unsigned NOT NULL, -- NRO_CA POR LO TANTO TIENEN 8 DIGITOS
+    origen INT(8) unsigned NOT NULL,
+    destino INT(8) unsigned NOT NULL,
 
     CONSTRAINT pk_transferencia
     PRIMARY KEY (nro_trans),
 
-    CONSTRAINT fk_transferencia_transaccion_por_caja
+    CONSTRAINT fk_transferencia_transaccion
     FOREIGN KEY (nro_trans) REFERENCES transaccion_por_caja(nro_trans),
 
-    CONSTRAINT fk_transferencia_cliente
-    FOREIGN KEY (nro_cliente) REFERENCES cliente(nro_cliente),
-
-    CONSTRAINT fk_transferencia_origen
-    FOREIGN KEY (origen) REFERENCES caja_ahorro(nro_ca),
+    CONSTRAINT fk_transferencia_cliente_ca
+    FOREIGN KEY (nro_cliente, origen) REFERENCES cliente_ca(nro_cliente, nro_ca),
 
     CONSTRAINT fk_transferencia_destino
     FOREIGN KEY (destino) REFERENCES caja_ahorro(nro_ca)
-    
 ) ENGINE=InnoDB;
 
 #-------------------------------------------------------------------------
@@ -387,6 +376,8 @@ INSERT INTO empleado VALUES(2092, "Castro", "Carlos", "DNI", 37678901, "Lavalle 
 INSERT INTO empleado VALUES(2093, "Navarro", "Julieta", "DNI", 38789012, "Peatonal San Martin 550", "1190123456", "Cajero", "word1234", 134);
 INSERT INTO empleado VALUES(2094, "Rios", "Tomas", "DNI", 39890123, "Avenida Colon 1500", "1201234567", "Cajero", "1234word", 135);
 
+
+
 #-------------------------------------------------------------------------
 # Creacion de vistas 
 # trans_cajas_ahorro = Datos de todas las transferencias que son "caja_ahorro"
@@ -399,6 +390,41 @@ INSERT INTO empleado VALUES(2094, "Rios", "Tomas", "DNI", 39890123, "Avenida Col
         JOIN clases as c   ON c.clase = b_c.clase
    WHERE c.tipo="acorazado";*/
 
+CREATE VIEW trans_cajas_ahorro AS
+SELECT 
+    ca.nro_ca,
+    ca.saldo,
+    t.nro_trans,
+    t.fecha,
+    t.hora,
+    CASE
+        WHEN d.nro_trans IS NOT NULL THEN 'debito'
+        WHEN e.nro_trans IS NOT NULL THEN 'extraccion'
+        WHEN tra.nro_trans IS NOT NULL THEN 'transferencia'
+        WHEN dep.nro_trans IS NOT NULL THEN 'deposito'
+        ELSE 'desconocido'
+    END AS tipo,
+    t.monto,
+    CASE
+        WHEN tra.nro_trans IS NOT NULL THEN tra.destino
+        ELSE NULL
+    END AS destino,
+    tc.cod_caja,
+    c.nro_cliente,
+    c.tipo_doc,
+    c.nro_doc,
+    c.nombre,
+    c.apellido
+FROM caja_ahorro ca
+LEFT JOIN transaccion_por_caja tc ON tc.cod_caja = ca.nro_ca
+LEFT JOIN transaccion t ON t.nro_trans = tc.nro_trans
+LEFT JOIN debito d ON d.nro_trans = t.nro_trans
+LEFT JOIN extraccion e ON e.nro_trans = t.nro_trans
+LEFT JOIN transferencia tra ON tra.nro_trans = t.nro_trans
+LEFT JOIN deposito dep ON dep.nro_trans = t.nro_trans
+LEFT JOIN cliente c ON c.nro_cliente = tra.nro_cliente 
+    OR c.nro_cliente = e.nro_cliente 
+    OR c.nro_cliente = d.nro_cliente;
 
 #-------------------------------------------------------------------------
 # Creacion de usuarios y otorgamiento de privilegios
@@ -443,12 +469,18 @@ CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';
     GRANT SELECT, INSERT, UPDATE ON banco.cliente TO 'empleado'@'localhost';
     GRANT SELECT, INSERT, UPDATE ON banco.pago TO 'empleado'@'localhost';
 
-/*# Luego creo un usuario 'atm' con CREATE USER
+# Luego creo un usuario 'atm' con CREATE USER
 
-    CREATE USER 'atm'@'localhost' IDENTIFIED BY 'atm'; 
+    CREATE USER 'atm'@'%' IDENTIFIED BY 'atm'; 
 
 # el usuario 'atm' con password 'atm' puede conectarse solo desde localhost
 
-# Luego le otorgo privilegios con GRANT*/
+# Luego le otorgo privilegios con GRANT
 
-    
+    GRANT SELECT ON banco.trans_cajas_ahorro TO 'atm'@'%';
+
+    -- Otorgar permisos de lectura y actualización sobre la tabla tarjeta
+    GRANT SELECT, UPDATE ON banco.tarjeta TO 'atm'@'%';
+
+-- Aplicar los cambios
+FLUSH PRIVILEGES;    
