@@ -346,11 +346,13 @@ CREATE TABLE transferencia (
 
 CREATE VIEW trans_cajas_ahorro AS
 SELECT 
-    ca.nro_ca,
-    ca.saldo,
     t.nro_trans,
     t.fecha,
     t.hora,
+    t.monto,
+    tc.cod_caja,
+    ca.nro_ca,
+    ca.saldo,
     CASE
         WHEN d.nro_trans IS NOT NULL THEN 'debito'
         WHEN e.nro_trans IS NOT NULL THEN 'extraccion'
@@ -358,24 +360,25 @@ SELECT
         WHEN dep.nro_trans IS NOT NULL THEN 'deposito'
         ELSE 'desconocido'
     END AS tipo,
-    t.monto,
     CASE
         WHEN tra.nro_trans IS NOT NULL THEN tra.destino
         ELSE NULL
     END AS destino,
-    tc.cod_caja,
     c.nro_cliente,
     c.tipo_doc,
     c.nro_doc,
     c.nombre,
     c.apellido
-FROM caja_ahorro ca
-LEFT JOIN transaccion_por_caja tc ON tc.cod_caja = ca.nro_ca
-LEFT JOIN transaccion t ON t.nro_trans = tc.nro_trans
+FROM transaccion t
+LEFT JOIN transaccion_por_caja tc ON tc.nro_trans = t.nro_trans
 LEFT JOIN debito d ON d.nro_trans = t.nro_trans
 LEFT JOIN extraccion e ON e.nro_trans = t.nro_trans
 LEFT JOIN transferencia tra ON tra.nro_trans = t.nro_trans
 LEFT JOIN deposito dep ON dep.nro_trans = t.nro_trans
+LEFT JOIN caja_ahorro ca ON ca.nro_ca = e.nro_ca
+    OR ca.nro_ca = d.nro_ca
+    OR ca.nro_ca = tra.origen
+    OR ca.nro_ca = dep.nro_ca
 LEFT JOIN cliente c ON c.nro_cliente = tra.nro_cliente 
     OR c.nro_cliente = e.nro_cliente 
     OR c.nro_cliente = d.nro_cliente;

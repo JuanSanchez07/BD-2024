@@ -28,21 +28,21 @@ INSERT INTO sucursal VALUES(136, "Supervielle", "Alem 850", "1167890123", "09:00
 INSERT INTO sucursal VALUES(137, "Comafi", "Entre Rios 1200", "1176543210", "09:00-18:00", 2800);
 
 #Empleados
-INSERT INTO empleado VALUES(2080, "Sevenants", "Antonio", "DNI", 43091344, "Alem 1047", "2923447685", "Encargado", "perro123", 128);
-INSERT INTO empleado VALUES(2081, "Perez", "Juan", "DNI", 40123456, "Sarmiento 123", "1134567890", "Cajero", "clave123", 129);
-INSERT INTO empleado VALUES(2082, "Gonzalez", "Maria", "DNI", 39234567, "Colon 450", "1145678901", "Gerente", "clave456", 130);
-INSERT INTO empleado VALUES(2083, "Lopez", "Carla", "DNI", 38456789, "Mitre 800", "1156789012", "Cajero", "clave789", 131);
-INSERT INTO empleado VALUES(2084, "Martinez", "Lucas", "DNI", 37654321, "Belgrano 900", "1167890123", "Supervisor", "secreto12", 132);
-INSERT INTO empleado VALUES(2085, "Fernandez", "Sofia", "DNI", 36890123, "San Martin 350", "1178901234", "Encargado", "pat123456", 133);
-INSERT INTO empleado VALUES(2086, "Rodriguez", "Jose", "DNI", 35467890, "Lavalle 500", "1189012345", "Asistente", "macro321", 134);
-INSERT INTO empleado VALUES(2087, "Alvarez", "Ana", "DNI", 32145678, "Avenida Rivadavia 200", "1134567891", "Cajero", "clave789", 129);
-INSERT INTO empleado VALUES(2088, "Mendoza", "Ricardo", "DNI", 33234567, "Av. Belgrano 600", "1145678912", "Gerente", "seguro12", 130);
-INSERT INTO empleado VALUES(2089, "Romero", "Laura", "DNI", 34345678, "Calle San Martin 500", "1156789123", "Cajero", "miClave1", 131);
-INSERT INTO empleado VALUES(2090, "Garcia", "Pedro", "DNI", 35456789, "Calle Mitre 1000", "1167890123", "Supervisor", "clave321", 132);
-INSERT INTO empleado VALUES(2091, "Vargas", "Sofia", "DNI", 36567890, "Av. San Martin 123", "1178901234", "Encargado", "pass1234", 133);
-INSERT INTO empleado VALUES(2092, "Castro", "Carlos", "DNI", 37678901, "Lavalle 450", "1189012345", "Asistente", "pass5678", 134);
-INSERT INTO empleado VALUES(2093, "Navarro", "Julieta", "DNI", 38789012, "Peatonal San Martin 550", "1190123456", "Cajero", "word1234", 134);
-INSERT INTO empleado VALUES(2094, "Rios", "Tomas", "DNI", 39890123, "Avenida Colon 1500", "1201234567", "Cajero", "1234word", 135);
+INSERT INTO empleado VALUES(2080, "Sevenants", "Antonio", "DNI", 43091344, "Alem 1047", "2923447685", "Encargado", md5("perro123"), 128);
+INSERT INTO empleado VALUES(2081, "Perez", "Juan", "DNI", 40123456, "Sarmiento 123", "1134567890", "Cajero", md5("clave123"), 129);
+INSERT INTO empleado VALUES(2082, "Gonzalez", "Maria", "DNI", 39234567, "Colon 450", "1145678901", "Gerente", md5("clave456"), 130);
+INSERT INTO empleado VALUES(2083, "Lopez", "Carla", "DNI", 38456789, "Mitre 800", "1156789012", "Cajero", md5("clave789"), 131);
+INSERT INTO empleado VALUES(2084, "Martinez", "Lucas", "DNI", 37654321, "Belgrano 900", "1167890123", "Supervisor", md5("secreto12"), 132);
+INSERT INTO empleado VALUES(2085, "Fernandez", "Sofia", "DNI", 36890123, "San Martin 350", "1178901234", "Encargado", md5("pat123456"), 133);
+INSERT INTO empleado VALUES(2086, "Rodriguez", "Jose", "DNI", 35467890, "Lavalle 500", "1189012345", "Asistente", md5("macro321"), 134);
+INSERT INTO empleado VALUES(2087, "Alvarez", "Ana", "DNI", 32145678, "Avenida Rivadavia 200", "1134567891", "Cajero", md5("clave789"), 129);
+INSERT INTO empleado VALUES(2088, "Mendoza", "Ricardo", "DNI", 33234567, "Av. Belgrano 600", "1145678912", "Gerente", md5("seguro12"), 130);
+INSERT INTO empleado VALUES(2089, "Romero", "Laura", "DNI", 34345678, "Calle San Martin 500", "1156789123", "Cajero", md5("miClave1"), 131);
+INSERT INTO empleado VALUES(2090, "Garcia", "Pedro", "DNI", 35456789, "Calle Mitre 1000", "1167890123", "Supervisor", md5("clave321"), 132);
+INSERT INTO empleado VALUES(2091, "Vargas", "Sofia", "DNI", 36567890, "Av. San Martin 123", "1178901234", "Encargado", md5("pass1234"), 133);
+INSERT INTO empleado VALUES(2092, "Castro", "Carlos", "DNI", 37678901, "Lavalle 450", "1189012345", "Asistente", md5("pass5678"), 134);
+INSERT INTO empleado VALUES(2093, "Navarro", "Julieta", "DNI", 38789012, "Peatonal San Martin 550", "1190123456", "Cajero", md5("word1234"), 134);
+INSERT INTO empleado VALUES(2094, "Rios", "Tomas", "DNI", 39890123, "Avenida Colon 1500", "1201234567", "Cajero", md5("1234word"), 135);
 
 #Clientes
 INSERT INTO cliente VALUES(101, "Gomez", "Julian","DNI", "41238908", "Peru 508", "2923703250", "2000-10-12");
